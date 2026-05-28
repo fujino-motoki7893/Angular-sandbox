@@ -1,0 +1,7 @@
+<div class="controls" aria-label="Timer controls">
+  <button class="primary-action" type="button" (click)="timerToggled.emit()">
+    {{ isRunning() ? 'Pause' : 'Start' }}
+  </button>
+  <button type="button" (click)="timerReset.emit()">Reset</button>
+  <button type="button" (click)="sessionCompleted.emit()">Complete</button>
+</div>

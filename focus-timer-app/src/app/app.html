@@ -8,67 +8,36 @@
       <p class="hero-copy">Choose a rhythm, start the timer, and let the session stay simple.</p>
     </header>
 
-    <div class="mode-tabs" role="group" aria-label="Timer mode">
-      @for (preset of presets; track preset.mode) {
-        <button
-          type="button"
-          [class.active]="selectedMode() === preset.mode"
-          [attr.aria-pressed]="selectedMode() === preset.mode"
-          (click)="selectMode(preset.mode)"
-        >
-          <span>{{ preset.label }}</span>
-          <small>{{ preset.minutes }} min</small>
-        </button>
-      }
-    </div>
+    <app-mode-selector
+      [presets]="presets"
+      [selectedMode]="selectedMode()"
+      (modeSelected)="selectMode($event)"
+    />
 
     <section class="timer-layout">
       <article class="timer-panel">
-        <div class="timer-ring" [style.background]="ringBackground()" aria-label="Timer progress">
-          <div class="timer-face">
-            <span>{{ activePreset().caption }}</span>
-            <strong>{{ formattedTime() }}</strong>
-            <p>{{ statusText() }}</p>
-          </div>
-        </div>
+        <app-timer-display
+          [caption]="activePreset().caption"
+          [formattedTime]="formattedTime()"
+          [statusText]="statusText()"
+          [ringBackground]="ringBackground()"
+        />
 
-        <div class="controls" aria-label="Timer controls">
-          <button class="primary-action" type="button" (click)="toggleTimer()">
-            {{ isRunning() ? 'Pause' : 'Start' }}
-          </button>
-          <button type="button" (click)="resetTimer()">Reset</button>
-          <button type="button" (click)="completeSession()">Complete</button>
-        </div>
+        <app-timer-controls
+          [isRunning]="isRunning()"
+          (timerToggled)="toggleTimer()"
+          (timerReset)="resetTimer()"
+          (sessionCompleted)="completeSession()"
+        />
       </article>
 
-      <aside class="stats-panel" aria-label="Focus summary">
-        <div class="stat-row">
-          <span>Today</span>
-          <strong>{{ completedSessions() }}</strong>
-          <small>focus sessions</small>
-        </div>
-
-        <div class="stat-row">
-          <span>Deep work</span>
-          <strong>{{ focusMinutes() }}</strong>
-          <small>minutes</small>
-        </div>
-
-        <div class="next-card">
-          <span>Suggested next</span>
-          <strong>{{ nextBreakLabel() }}</strong>
-          <button type="button" (click)="selectRecommendedBreak()">Switch</button>
-        </div>
-
-        <button
-          class="reset-day"
-          type="button"
-          [disabled]="completedSessions() === 0"
-          (click)="resetToday()"
-        >
-          Reset today
-        </button>
-      </aside>
+      <app-session-stats
+        [completedSessions]="completedSessions()"
+        [focusMinutes]="focusMinutes()"
+        [nextBreakLabel]="nextBreakLabel()"
+        (recommendedBreakSelected)="selectRecommendedBreak()"
+        (todayReset)="resetToday()"
+      />
     </section>
   </section>
 </main>

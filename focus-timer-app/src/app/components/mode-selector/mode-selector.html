@@ -1,0 +1,13 @@
+<div class="mode-tabs" role="group" aria-label="Timer mode">
+  @for (preset of presets(); track preset.mode) {
+    <button
+      type="button"
+      [class.active]="selectedMode() === preset.mode"
+      [attr.aria-pressed]="selectedMode() === preset.mode"
+      (click)="modeSelected.emit(preset.mode)"
+    >
+      <span>{{ preset.label }}</span>
+      <small>{{ preset.minutes }} min</small>
+    </button>
+  }
+</div>

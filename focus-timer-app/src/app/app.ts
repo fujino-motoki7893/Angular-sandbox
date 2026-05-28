@@ -1,13 +1,10 @@
 import { Component, OnDestroy, computed, effect, signal } from '@angular/core';
 
-type TimerMode = 'focus' | 'shortBreak' | 'longBreak';
-
-interface TimerPreset {
-  mode: TimerMode;
-  label: string;
-  minutes: number;
-  caption: string;
-}
+import { ModeSelector } from './components/mode-selector/mode-selector';
+import { SessionStats } from './components/session-stats/session-stats';
+import { TimerControls } from './components/timer-controls/timer-controls';
+import { TimerDisplay } from './components/timer-display/timer-display';
+import { TimerMode, TimerPreset } from './timer.model';
 
 interface SavedTimerState {
   selectedMode: TimerMode;
@@ -20,6 +17,7 @@ const DEFAULT_MODE: TimerMode = 'focus';
 
 @Component({
   selector: 'app-root',
+  imports: [ModeSelector, TimerDisplay, TimerControls, SessionStats],
   templateUrl: './app.html',
   styleUrl: './app.css',
 })

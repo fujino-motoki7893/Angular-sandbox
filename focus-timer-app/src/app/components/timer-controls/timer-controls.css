@@ -1,0 +1,24 @@
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+
+button {
+  min-height: 44px;
+  border: 0;
+  border-radius: 7px;
+  padding: 0 18px;
+  color: #f7f2e8;
+  background: rgba(247, 242, 232, 0.12);
+  cursor: pointer;
+  font: inherit;
+  font-weight: 800;
+}
+
+.primary-action {
+  min-width: 120px;
+  color: #172421;
+  background: #efcf6a;
+}

@@ -1,0 +1,28 @@
+<aside class="stats-panel" aria-label="Focus summary">
+  <div class="stat-row">
+    <span>Today</span>
+    <strong>{{ completedSessions() }}</strong>
+    <small>focus sessions</small>
+  </div>
+
+  <div class="stat-row">
+    <span>Deep work</span>
+    <strong>{{ focusMinutes() }}</strong>
+    <small>minutes</small>
+  </div>
+
+  <div class="next-card">
+    <span>Suggested next</span>
+    <strong>{{ nextBreakLabel() }}</strong>
+    <button type="button" (click)="recommendedBreakSelected.emit()">Switch</button>
+  </div>
+
+  <button
+    class="reset-day"
+    type="button"
+    [disabled]="completedSessions() === 0"
+    (click)="todayReset.emit()"
+  >
+    Reset today
+  </button>
+</aside>

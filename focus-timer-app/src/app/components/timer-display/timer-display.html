@@ -1,0 +1,7 @@
+<div class="timer-ring" [style.background]="ringBackground()" aria-label="Timer progress">
+  <div class="timer-face">
+    <span>{{ caption() }}</span>
+    <strong>{{ formattedTime() }}</strong>
+    <p>{{ statusText() }}</p>
+  </div>
+</div>
