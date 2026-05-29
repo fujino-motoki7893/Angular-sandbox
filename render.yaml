@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: focus-timer-app
+    runtime: static
+    branch: develop
+    autoDeployTrigger: commit
+    buildCommand: cd focus-timer-app && npm ci && npm run build
+    staticPublishPath: focus-timer-app/dist/focus-timer-app/browser
+    envVars:
+      - key: NODE_VERSION
+        value: 22.18.0
+    buildFilter:
+      paths:
+        - render.yaml
+        - focus-timer-app/**
+    routes:
+      - type: rewrite
+        source: "/*"
+        destination: /index.html
