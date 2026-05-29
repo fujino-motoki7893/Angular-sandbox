@@ -62,9 +62,7 @@ export class App implements OnDestroy {
   protected readonly formattedTime = computed(() => this.formatTime(this.secondsRemaining()));
   protected readonly focusMinutes = computed(() => this.completedSessions() * 25);
   protected readonly nextBreakLabel = computed(() =>
-    this.completedSessions() > 0 && this.completedSessions() % 4 === 0
-      ? 'Long Break'
-      : 'Short Break',
+    this.selectedMode() === 'focus' ? 'Short Break' : 'Focus',
   );
   protected readonly statusText = computed(() => {
     if (this.isRunning()) {
@@ -139,11 +137,7 @@ export class App implements OnDestroy {
   }
 
   protected selectRecommendedBreak(): void {
-    this.selectMode(
-      this.completedSessions() > 0 && this.completedSessions() % 4 === 0
-        ? 'longBreak'
-        : 'shortBreak',
-    );
+    this.selectMode(this.nextModeAfter(this.selectedMode()));
   }
 
   private startTicker(): void {
@@ -171,15 +165,28 @@ export class App implements OnDestroy {
 
   private finishCurrentMode(): void {
     const completedMode = this.selectedMode();
+    const shouldContinue = this.isRunning();
+    const nextMode = this.nextModeAfter(completedMode);
 
     this.stopTicker();
     this.isRunning.set(false);
-    this.secondsRemaining.set(0);
     this.lastCompletedMode.set(completedMode);
 
     if (completedMode === 'focus') {
       this.completedSessions.update((count) => count + 1);
     }
+
+    this.selectedMode.set(nextMode);
+    this.secondsRemaining.set(this.durationFor(nextMode));
+
+    if (shouldContinue) {
+      this.isRunning.set(true);
+      this.startTicker();
+    }
+  }
+
+  private nextModeAfter(mode: TimerMode): TimerMode {
+    return mode === 'focus' ? 'shortBreak' : 'focus';
   }
 
   private findPreset(mode: TimerMode): TimerPreset {

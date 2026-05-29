@@ -1,4 +1,5 @@
 import { TestBed } from '@angular/core/testing';
+import { vi } from 'vitest';
 import { App } from './app';
 
 describe('App', () => {
@@ -52,5 +53,34 @@ describe('App', () => {
 
     expect(compiled.textContent).toContain('1');
     expect(localStorage.getItem('focus-timer-app.state')).toContain('"completedSessions":1');
+  });
+
+  it('should automatically cycle from focus to short break and back to focus', () => {
+    vi.useFakeTimers();
+
+    const fixture = TestBed.createComponent(App);
+    fixture.detectChanges();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    const startButton = Array.from(compiled.querySelectorAll('button')).find(
+      (button) => button.textContent?.trim() === 'Start',
+    );
+
+    startButton?.click();
+    fixture.detectChanges();
+
+    vi.advanceTimersByTime(25 * 60 * 1000);
+    fixture.detectChanges();
+
+    expect(compiled.textContent).toContain('05:00');
+    expect(compiled.textContent).toContain('1');
+
+    vi.advanceTimersByTime(5 * 60 * 1000);
+    fixture.detectChanges();
+
+    expect(compiled.textContent).toContain('25:00');
+
+    fixture.destroy();
+    vi.useRealTimers();
   });
 });
